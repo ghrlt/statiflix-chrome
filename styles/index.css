@@ -1,0 +1,130 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+    width: 100vw;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
+#profiles-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    margin: 1rem;
+    padding: 1rem;
+
+    cursor: pointer;
+}
+.profile:hover {
+    border-radius: 1rem;
+    background-color: #1b1b1b;
+}
+
+.profile img.avatar {
+    width: 15rem;
+
+    pointer-events: none;
+    user-select: none;
+
+    margin-bottom: .75rem;
+}
+
+.profile h2.name {
+    margin: 0;
+    padding: 0;
+}
+
+
+#add-new-profile-qr-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 40vw;
+    height: 100vh;
+
+    background-color: rgba(0, 0, 0, .5);
+}
+
+#add-new-profile-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    width: 2rem;
+    height: 2rem;
+
+    border-radius: 50%;
+    background-color: transparent;
+
+    border: 1px solid #fff;
+    color: #fff;
+
+    padding: .5rem;
+
+    cursor: pointer;
+}
+#add-new-profile-close-btn:hover {
+    background-color: #ffffffb9;
+    color: #000;
+}
+
+#add-new-profile-qr-popup-content {
+
+    padding: 1rem 3rem 1rem 3rem;
+
+    position: relative;
+    margin: 5vw 5vh 5vw 5vh;
+
+    background-color: #1b1b1b;
+}
+#add-new-profile-qr-popup-content > div:first-child {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+}
+#add-new-profile-qr-popup-content > div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-evenly;
+    align-items: center;
+
+    width: 100%;
+}
+
+
+#qr-code {
+    user-select: none;
+    cursor: vertical-text;
+}

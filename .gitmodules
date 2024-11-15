@@ -1,0 +1,3 @@
+[submodule "vendor/he"]
+	path = vendor/he
+	url = https://github.com/mathiasbynens/he

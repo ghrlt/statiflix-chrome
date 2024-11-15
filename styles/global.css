@@ -1,0 +1,66 @@
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    background-color: #141414;
+}
+
+@-webkit-keyframes load_spinner {
+    0% {
+        transform:rotate(0deg) /*!rtl:ignore*/
+    }
+    50% {
+        transform:rotate(180deg) /*!rtl:ignore*/
+    }
+    to {
+        transform:rotate(1turn) /*!rtl:ignore*/
+    }
+}
+@keyframes load_spinner{
+    0% {
+        transform:rotate(0deg) /*!rtl:ignore*/
+    }
+    50% {
+        transform:rotate(180deg) /*!rtl:ignore*/
+    }
+    to {
+        transform:rotate(1turn) /*!rtl:ignore*/
+    }
+}
+.netflix-loader {
+    height: 4rem;
+    width: 4rem;
+
+    -webkit-animation: load_spinner .9s linear infinite;
+    animation: load_spinner .9s linear infinite;
+    background-image: url(https://assets.nflxext.com/en_us/pages/wiplayer/site-spinner.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    bottom: 1px;
+    left: 1px;
+    margin: auto;
+    position: absolute;
+    right: 1px;
+    text-align: center;
+    top: 1px;
+    pointer-events: none;
+}
+#loader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logs {
+    padding-top: 80vh;
+    text-align: center;
+}
+
+#logs a {
+    color: inherit;
+    font-weight: bolder;
+}

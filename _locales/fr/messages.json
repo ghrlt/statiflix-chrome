@@ -1,0 +1,23 @@
+{
+    "stati_page_title": {
+        "message": "StatiFlix ! 👋"
+    },
+    "add_new_profile_qr_title": {
+        "message": "$profileName, tout est prêt ! Plus qu'une étape pour profiter de StatiFlix.",
+        "description": "The title of the QR code modal",
+        "placeholders": {
+            "profileName": {
+                "content": "$1",
+                "example": "Jean"
+            }
+        }
+    },
+    "selectNetflixProfile": {
+        "message": "Sélectionnez votre profil Netflix",
+        "description": "The title of the profile selection page"
+    },
+    "scanQrCode": {
+        "message": "Scanner le QR code avec votre téléphone",
+        "description": "The subtitle appearing next to any QR code"
+    }
+}
