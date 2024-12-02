@@ -8,28 +8,75 @@ body {
     background-color: #141414;
 }
 
+.rotate {
+    transform: rotate(180deg);
+}
+
+.rotate-qr {
+    animation: spinandfade 1s forwards;
+}
+
+@keyframes spinandfade {
+    0% {
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+
+    75% {
+        opacity: .05;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes spinandfade {
+    0% {
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+
+    50% {
+        /* transform: rotate(180deg); */
+        opacity: .05;
+    }
+
+    100% {
+        transform: rotate(360deg);
+        opacity: 1;
+    }
+}
+
 @-webkit-keyframes load_spinner {
     0% {
-        transform:rotate(0deg) /*!rtl:ignore*/
+        transform: rotate(0deg)
     }
+
     50% {
-        transform:rotate(180deg) /*!rtl:ignore*/
+        transform: rotate(180deg)
     }
+
     to {
-        transform:rotate(1turn) /*!rtl:ignore*/
+        transform: rotate(1turn)
     }
 }
-@keyframes load_spinner{
+
+@keyframes load_spinner {
     0% {
-        transform:rotate(0deg) /*!rtl:ignore*/
+        transform: rotate(0deg)
     }
+
     50% {
-        transform:rotate(180deg) /*!rtl:ignore*/
+        transform: rotate(180deg)
     }
+
     to {
-        transform:rotate(1turn) /*!rtl:ignore*/
+        transform: rotate(1turn)
     }
 }
+
 .netflix-loader {
     height: 4rem;
     width: 4rem;
@@ -48,6 +95,7 @@ body {
     top: 1px;
     pointer-events: none;
 }
+
 #loader {
     display: flex;
     flex-direction: column;

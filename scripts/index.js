@@ -145,12 +145,16 @@ async function displayProfiles(profiles) {
         profiles.forEach((profile) => {
             const profileItem = document.createElement('div');
             profileItem.classList.add('profile');
+            profileItem.classList.add('perspec');
+
             profileItem.setAttribute('data-profile-uid', profile.uid);
 
-            const profileAvatar = document.createElement('img');
+            const profileAvatar = document.createElement('div');
             profileAvatar.classList.add('avatar');
-            profileAvatar.src = profile.avatar;
-            profileAvatar.alt = profile.name;
+            const profileAvatarImg = document.createElement('img');
+            profileAvatarImg.src = profile.avatar;
+            profileAvatarImg.alt = profile.name;
+            profileAvatar.appendChild(profileAvatarImg);
             profileItem.appendChild(profileAvatar);
 
             const profileName = document.createElement('h2');
@@ -159,8 +163,12 @@ async function displayProfiles(profiles) {
             profileItem.appendChild(profileName);
 
             profileItem.addEventListener('click', async () => {
-                writeLogMessage('Selectionned profile: ' + profile.name);
+                if (profileItem.classList.contains('current')) {
+                    return;
+                }
 
+                writeLogMessage('Selectionned profile: ' + profile.name);
+                profileItem.classList.add('current');
                 handleProfileSelection(profile);
             });
 
@@ -242,6 +250,7 @@ async function handleProfileSelection(profile) {
     qrCodeElement.innerHTML = '';
     var qrCode = new QRCode(qrCodeElement, {
         text: dataBase64,
+        imagePath: 'medias/icon.png',
         width: 256,
         height: 256,
         colorDark: "#000000",
@@ -250,18 +259,47 @@ async function handleProfileSelection(profile) {
     });
     qrCodeElement.alt = 'StatiFlix generated QR Code';
 
-    // ~ Add profile name to the popup
-    var profileNameElement = document.querySelector('h1[data-key-ref=add_new_profile_qr_title]');
-    profileNameElement.innerText = chrome.i18n.getMessage('add_new_profile_qr_title', profile.name);
+    // ~ Use setTimeout to give qrCode its time to be generated
+    setTimeout(() => {
+        var avatarElement = document.querySelector('div[data-profile-uid="' + profile.uid + '"]').querySelector('.avatar');
+        var qrImg = qrCodeElement.querySelector('img');
 
-    // ~ Show large inside-page popup window with Qr Code on the left and instructions on the right
-    var popup = document.getElementById('add-new-profile-qr-popup');
-    popup.style.display = 'block';
+        if (qrImg) {
+            // ~ Add rotate animation to avatar
+            avatarElement.classList.add('rotate-qr');
 
-    var popupCloseBtn = document.getElementById('add-new-profile-close-btn');
-    popupCloseBtn.onclick = function () {
-        popup.style.display = 'none';
-    }
+            // ~ Use setTimeout to change img src after animation
+            setTimeout(() => {
+                const avatarUrl = avatarElement.querySelector('img').getAttribute('src');
+                avatarElement.querySelector('img').src = qrImg.getAttribute('src');
+                avatarElement.querySelector('img').alt = 'StatiFlix generated QR Code';
+                avatarElement.querySelector('img').style.border = '1px solid #fff';
+
+                setTimeout(() => {
+                    avatarElement.classList.remove('rotate-qr');
+                }, 1000 * .25); // ~  25% of CSS animation duration
+
+                // ~ Hide QR Code after 5 seconds
+                setTimeout(() => {
+                    avatarElement.classList.add('rotate-qr');
+
+                    setTimeout(() => {
+                        avatarElement.querySelector('img').src = avatarUrl;
+                        avatarElement.querySelector('img').alt = profile.name;
+                        avatarElement.querySelector('img').style.border = 'none';
+
+                        profileItem.classList.remove('current');
+
+                        setTimeout(() => {
+                            avatarElement.classList.remove('rotate-qr');
+                        }, 1000 * .25); // ~  25% of CSS animation duration
+                    }, 1000 * .75); // ~  75% of CSS animation duration
+                }, 5000);
+            }, 1000 * .75); // ~  75% of CSS animation duration
+        } else {
+            console.error('L\'image du QR Code n\'a pas été générée.');
+        }
+    }, 100); // Temps d'attente pour laisser le temps au QR code d'être généré
 
     writeLogMessage('Profile selection handled');
 }
