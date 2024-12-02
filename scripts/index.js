@@ -161,11 +161,13 @@ async function displayProfiles(profiles) {
             profileItem.addEventListener('click', async () => {
                 writeLogMessage('Selectionned profile: ' + profile.name);
 
-                handleProfileSelection(profile.uid);
+                handleProfileSelection(profile);
             });
 
             profilesList.appendChild(profileItem);
         });
+    } else {
+        writeLogMessage('No profiles list element found in the page');
     }
 
     writeLogMessage('Netflix profiles displayed');
@@ -208,15 +210,15 @@ async function switchProfileAndGetCookies(profilUid) {
     return netflixCookies;
 }
 
-async function handleProfileSelection(profileUid) {
+async function handleProfileSelection(profile) {
     writeLogMessage('Handling profile selection...');
 
     // ~ Get cookies for profile
-    cookies = await switchProfileAndGetCookies(profileUid);
+    cookies = await switchProfileAndGetCookies(profile.uid);
 
     // ~ Create JSON object with cookies and profileUid
     var obj = {
-        profileUid: profileUid,
+        profileUid: profile.uid,
         cookies: cookies
     };
 
@@ -227,6 +229,7 @@ async function handleProfileSelection(profileUid) {
     // ~ Generate data
     var data = {
         'action': 'add-new-profile',
+        'profile_username': profile.name,
         'profile_obj': dataBase64
     }
 
@@ -249,14 +252,14 @@ async function handleProfileSelection(profileUid) {
 
     // ~ Add profile name to the popup
     var profileNameElement = document.querySelector('h1[data-key-ref=add_new_profile_qr_title]');
-    profileNameElement.innerText = "profileName" + ', ' + chrome.i18n.getMessage('add_new_profile_qr_title', "profileName");
+    profileNameElement.innerText = chrome.i18n.getMessage('add_new_profile_qr_title', profile.name);
 
     // ~ Show large inside-page popup window with Qr Code on the left and instructions on the right
     var popup = document.getElementById('add-new-profile-qr-popup');
     popup.style.display = 'block';
 
     var popupCloseBtn = document.getElementById('add-new-profile-close-btn');
-    popupCloseBtn.onclick = function() {
+    popupCloseBtn.onclick = function () {
         popup.style.display = 'none';
     }
 
