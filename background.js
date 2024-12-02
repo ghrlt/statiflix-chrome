@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(function (object) {
-    let internalUrl = chrome.runtime.getURL("index.html");
+    let internalUrl = chrome.runtime.getURL("/pages/index.html");
 
     if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
         chrome.tabs.create({ url: internalUrl });
@@ -7,5 +7,5 @@ chrome.runtime.onInstalled.addListener(function (object) {
 });
 
 chrome.action.onClicked.addListener(function (tab) {
-    chrome.tabs.create({ url: chrome.runtime.getURL('pages/index.html'), selected: true });
+    chrome.tabs.create({ url: chrome.runtime.getURL('/pages/index.html'), selected: true });
 });
