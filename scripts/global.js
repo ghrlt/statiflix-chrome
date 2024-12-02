@@ -1,5 +1,5 @@
 async function setTexts() {
-    let texts = document.getElementsByClassName("text");
+    let texts = document.querySelectorAll("*[data-text-key]");
     for (let text of texts) {
         let key = text.getAttribute("data-text-key");
         text.innerText = chrome.i18n.getMessage(key);
@@ -13,5 +13,5 @@ if (img) {
     img.addEventListener('dragstart', (event) => {
         event.preventDefault();
     });
-    
+
 }
