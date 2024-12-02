@@ -3,7 +3,7 @@
         "message": "StatiFlix ! 👋"
     },
     "add_new_profile_qr_title": {
-        "message": "$profileName, tout est prêt ! Plus qu'une étape pour profiter de StatiFlix.",
+        "message": "$profileName$, tout est prêt ! Plus qu'une étape pour profiter de StatiFlix.",
         "description": "The title of the QR code modal",
         "placeholders": {
             "profileName": {
