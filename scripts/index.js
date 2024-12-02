@@ -14,7 +14,7 @@ async function writeLogMessage(message, append = false, onlyConsole = false) {
     }
 }
 
-async function hideLoader() {
+async function hideLoader(showContent = true) {
     writeLogMessage('Hiding loader...');
 
     const loader = document.getElementById('loader');
@@ -22,11 +22,12 @@ async function hideLoader() {
         loader.style.display = 'none';
     }
 
-    const content = document.getElementById('content');
-    if (content) {
-        content.style.display = '';
+    if (showContent) {
+        const content = document.getElementById('content');
+        if (content) {
+            content.style.display = '';
+        }
     }
-
     writeLogMessage('Loader hidden');
 }
 
@@ -50,6 +51,18 @@ async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+async function displayError() {
+    hideLoader(showContent = false);
+    writeLogMessage('Displaying error...');
+
+    const errorElement = document.querySelector('.error#pleaseLogin');
+    if (errorElement) {
+        errorElement.style.display = '';
+    }
+
+    writeLogMessage('Error displayed');
+}
+
 
 async function fetchProfiles() {
     writeLogMessage('Fetching Netflix profiles...');
@@ -57,10 +70,17 @@ async function fetchProfiles() {
     var profilesData = [];
 
     try {
-        const resp = await fetch('https://www.netflix.com/browse');
+        const resp = await fetch('https://www.netflix.com/browse',);
         if (resp.status !== 200) {
             writeLogMessage('Unable to fetch Netflix profiles. Code ' + resp.status);
-            throw new Error('Code ' + resp.status + ' while fetching Netflix profiles.');
+            return { 'error': 'Unable to fetch Netflix profiles. Code ' + resp.status, 'profiles': [] }
+        }
+        if (resp.redirected) {
+            writeLogMessage('Redirected to ' + resp.url);
+            if (resp.url.includes('login')) {
+                writeLogMessage('User not logged in');
+                return { 'error': 'LoggedOut', 'profiles': [] }
+            }
         }
 
         const data = await resp.text();
@@ -127,12 +147,18 @@ async function fetchProfiles() {
                 }
             }
         }
+
+        if (profilesData.length === 0) {
+            writeLogMessage('No profiles found');
+            return { 'error': 'No profiles found', 'profiles': [] }
+        }
         writeLogMessage('Netflix profiles fetched: ' + profilesData.length);
     } catch (error) {
         writeLogMessage('Error fetching profiles: ' + error);
+        return { 'error': error, 'profiles': [] }
     }
 
-    return profilesData;
+    return { 'error': null, 'profiles': profilesData };
 }
 
 async function displayProfiles(profiles) {
@@ -288,7 +314,7 @@ async function handleProfileSelection(profile) {
                         avatarElement.querySelector('img').alt = profile.name;
                         avatarElement.querySelector('img').style.border = 'none';
 
-                        profileItem.classList.remove('current');
+                        avatarElement.parentElement.classList.remove('current');
 
                         setTimeout(() => {
                             avatarElement.classList.remove('rotate-qr');
@@ -309,12 +335,26 @@ async function main() {
 
     await sleep(300);
 
-    const profiles = await fetchProfiles();
-    console.log(profiles);
+    const result = await fetchProfiles();
 
-    await sleep(300);
+    if (result['error'] != null) {
+        if (result['error'] === 'LoggedOut') {
+            writeLogMessage('User not logged in');
+            displayError();
+            return;
+        }
+    } else {
+        profiles = result['profiles'];
+        if (profiles.length === 0) {
+            writeLogMessage('No profiles found');
+            displayError();
+            return;
+        }
 
-    await hideLoader();
-    await displayProfiles(profiles);
+        await sleep(300);
+
+        await hideLoader();
+        await displayProfiles(profiles);
+    }
 }
 main();

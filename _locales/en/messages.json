@@ -13,11 +13,19 @@
         }
     },
     "selectNetflixProfile": {
-        "message": "Select your Netflix profile",
+        "message": "Select your preferred Netflix profile",
         "description": "The title of the profile selection page"
     },
     "scanQrCode": {
         "message": "Please scan this QR code with your phone",
         "description": "The subtitle appearing next to any QR code"
+    },
+    "login": {
+        "message": "Login",
+        "description": "The button text to login"
+    },
+    "pleaseLogin": {
+        "message": "Please go to Netflix & login to your account",
+        "description": "The subtitle appearing next to the login button"
     }
 }
