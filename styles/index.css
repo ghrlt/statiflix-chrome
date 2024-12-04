@@ -27,11 +27,11 @@ h2 {
 }
 
 .perspec img {
-    filter: blur(2px);
+    filter: blur(1px);
 }
 
 .perspec .name {
-    filter: blur(1px);
+    filter: blur(.5px);
 
 }
 
