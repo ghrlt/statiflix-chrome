@@ -51,6 +51,14 @@ async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function uuidv4() {
+    return 'Ixxxxxxx-Mxxx-4xxx-Yxxx-Oxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = (Math.random() * 16) | 0,
+            v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+
 async function displayError() {
     hideLoader(showContent = false);
     writeLogMessage('Displaying error...');
@@ -61,6 +69,29 @@ async function displayError() {
     }
 
     writeLogMessage('Error displayed');
+}
+
+const API_URL = "https://statiflix.bostra.dev";
+async function makeDataAvailable(id, data) {
+    writeLogMessage('Sending data to server...');
+
+    var resp = await fetch(`${API_URL}/temporary/accounts/add`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // ~ Skip ngrok security interstitial if needed
+            ...(API_URL.includes('ngrok-free.app') ? { 'ngrok-skip-browser-warning': true } : {}),
+        },
+        body: JSON.stringify({
+            'unique-identifier': id,
+            'content': data,
+        }),
+    });
+    resp.json().then((data) => {
+        writeLogMessage('Data sent to server: ' + data);
+    }).catch((error) => {
+        writeLogMessage('Error sending data to server: ' + error);
+    });
 }
 
 
@@ -256,32 +287,33 @@ async function handleProfileSelection(profile) {
         cookies: cookies
     };
 
-    // ~ Encode data to Base64
-    var dataString = JSON.stringify(data);
-    var dataBase64 = btoa(dataString);
-
     // ~ Generate data
     var data = {
         'action': 'add-new-profile',
         'profile_username': profile.name,
-        'profile_obj': dataBase64
+        'profile_obj': obj
     }
 
     // ~ Encode data to Base64
     var dataString = JSON.stringify(data);
     var dataBase64 = btoa(dataString);
 
+    var identifier = uuidv4();
+    var identifierBase64 = btoa(identifier);
+
+    await makeDataAvailable(identifier, dataBase64);
+
     // ~ Create QR Code
     var qrCodeElement = document.getElementById('qr-code');
     qrCodeElement.innerHTML = '';
     var qrCode = new QRCode(qrCodeElement, {
-        text: dataBase64,
+        text: identifierBase64,
         imagePath: 'medias/icon.png',
         width: 256,
         height: 256,
         colorDark: "#000000",
         colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
+        correctLevel: QRCode.CorrectLevel.L
     });
     qrCodeElement.alt = 'StatiFlix generated QR Code';
 
