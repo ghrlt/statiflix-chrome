@@ -10,7 +10,7 @@
 
 ## Installation
 
-Install via the [Chrome Web Store](https://chrome.google.com/webstore/detail/statiflix)
+Install via the [Chrome Web Store](https://chromewebstore.google.com/detail/statiflix/hjknckckeiiabgkcjgknkcnjnaflgidh)
 
 Install from source:
 - Download the repo -> [here](https://github.com/ghrlt/statiflix-chrome/archive/refs/heads/master.zip)
